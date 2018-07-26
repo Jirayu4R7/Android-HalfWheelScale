@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="HalfWheelScaleView">
+        <attr name="indicatorInterval" format="integer" />
+        <attr name="maxValue" format="integer" />
+        <attr name="minValue" format="integer" />
+        <attr name="indicatorGapAngle" format="integer" />
+        <attr name="textSize" format="dimension" />
+        <attr name="indicatorColor" format="color" />
+        <attr name="longIndicatorHeight" format="dimension" />
+        <attr name="shortIndicatorHeight" format="dimension" />
+        <attr name="indicatorStrokeWidth" format="dimension" />
+        <attr name="paintIndicatorColor" format="color" />
+        <attr name="paintNotchColor" format="color" />
+        <attr name="paintInnerCircleColor" format="color" />
+        <attr name="paintTextColor" format="color" />
+        <attr name="paintArcColor" format="color" />
+    </declare-styleable>
+</resources>
