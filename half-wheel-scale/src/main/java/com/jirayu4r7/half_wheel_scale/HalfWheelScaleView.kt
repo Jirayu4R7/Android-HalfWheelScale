@@ -40,6 +40,7 @@ class HalfWheelScaleView : View {
     private var delta: Double = 0.0
     private var indicatorStrokeWidth: Float = 0f
     private var paintInnerCircleColor: Int = 0
+    private var paintCircleSmallColor: Int = 0
     private var paintNotchColor: Int = 0
     private var paintTextColor: Int = 0
     private var paintIndicatorColor: Int = 0
@@ -59,6 +60,7 @@ class HalfWheelScaleView : View {
     private lateinit var paintText: Paint
     private lateinit var notchPath: Path
     private lateinit var notchPaint: Paint
+    private lateinit var paintCircleSmall: Paint
 
 
     private var initVelocity = 0.5f
@@ -126,6 +128,7 @@ class HalfWheelScaleView : View {
                 paintInnerCircleColor = typedArray.getColor(R.styleable.HalfWheelScaleView_paintInnerCircleColor, Color.DKGRAY)
                 paintNotchColor = typedArray.getColor(R.styleable.HalfWheelScaleView_paintNotchColor, Color.parseColor("#f17634"))
                 paintIndicatorColor = typedArray.getColor(R.styleable.HalfWheelScaleView_paintIndicatorColor, Color.WHITE)
+                paintCircleSmallColor = typedArray.getColor(R.styleable.HalfWheelScaleView_paintCircleColor, Color.WHITE)
                 paintTextColor = typedArray.getColor(R.styleable.HalfWheelScaleView_paintTextColor, Color.WHITE)
                 paintArcColor = typedArray.getColor(R.styleable.HalfWheelScaleView_paintArcColor, Color.WHITE)
                 mLongIndicatorHeight = typedArray.getDimension(R.styleable.HalfWheelScaleView_longIndicatorHeight, Utils().dpToPx(context, 18f))
@@ -147,6 +150,7 @@ class HalfWheelScaleView : View {
         indicatorGapAngle = indicatorGapAngle / 180.toDouble() * PI
 
         paintInnerCircle = Paint()
+        paintCircleSmall= Paint()
         paintArc = Paint()
         paintIndicator = Paint()
         paintText = Paint()
@@ -217,8 +221,7 @@ class HalfWheelScaleView : View {
     private fun makeRadGrad(canvas: Canvas) {
         canvas.drawCircle(centerX, centerY, radius, paintInnerCircle)
         canvas.drawCircle(centerX, centerY, radius, paintArc)
-        var paintCircleSmall = Paint()
-        paintCircleSmall.color = Color.WHITE
+        paintCircleSmall.color = paintCircleSmallColor
         canvas.drawCircle(centerX, centerY, radiusCircleSmall, paintCircleSmall)
 
         var mIndicatorHeight: Float
@@ -411,8 +414,13 @@ class HalfWheelScaleView : View {
         mShortIndicatorHeight = Utils().dpToPx(context, shortIndicatorHeight)
     }
 
-    fun setCircleW(cWidth: Float) {
-        circleWidth = Utils().dpToPx(context, cWidth)
+    fun setDonutWidth(donutWidth: Float) {
+        circleWidth = Utils().dpToPx(context, donutWidth)
+    }
+
+    fun setCircleSmallColor(smallColor: Int){
+        paintCircleSmallColor = smallColor
+        paintCircleSmall.color = paintCircleSmallColor
     }
 
     fun setArcColor(arcColor: Int) {

@@ -11,6 +11,7 @@
         <attr name="shortIndicatorHeight" format="dimension" />
         <attr name="indicatorStrokeWidth" format="dimension" />
         <attr name="paintIndicatorColor" format="color" />
+        <attr name="paintCircleColor" format="color" />
         <attr name="paintNotchColor" format="color" />
         <attr name="paintInnerCircleColor" format="color" />
         <attr name="paintTextColor" format="color" />
