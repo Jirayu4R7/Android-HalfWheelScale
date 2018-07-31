@@ -3,7 +3,6 @@ package com.jirayu4r7.half_wheel_scale
 import android.annotation.TargetApi
 import android.content.Context
 import android.graphics.*
-import android.support.annotation.CheckResult
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.VelocityTracker
@@ -62,9 +61,7 @@ class HalfWheelScaleView : View {
     private lateinit var notchPaint: Paint
     private lateinit var paintCircleSmall: Paint
 
-
     private var initVelocity = 0.5f
-
 
     private var onHalfWheelValueChangeListener: OnHalfWheelValueChangeListener? = null
 
@@ -122,9 +119,9 @@ class HalfWheelScaleView : View {
                 indicatorInterval = typedArray.getInt(R.styleable.HalfWheelScaleView_indicatorInterval, 5)
                 mMaxValue = typedArray.getInt(R.styleable.HalfWheelScaleView_maxValue, 100)
                 mMinValue = typedArray.getInt(R.styleable.HalfWheelScaleView_minValue, 0)
-                textSize = typedArray.getDimension(R.styleable.HalfWheelScaleView_textSize, 12f)
+                textSize = typedArray.getDimension(R.styleable.HalfWheelScaleView_textSize, Utils().spToPx(context, 12))
                 indicatorStrokeWidth = typedArray.getDimension(R.styleable.HalfWheelScaleView_indicatorStrokeWidth, Utils().dpToPx(context, 1.5f))
-                indicatorGapAngle = typedArray.getInt(R.styleable.HalfWheelScaleView_indicatorGapAngle, 0).toDouble()
+                indicatorGapAngle = typedArray.getInt(R.styleable.HalfWheelScaleView_indicatorGapAngle, 3).toDouble()
                 paintInnerCircleColor = typedArray.getColor(R.styleable.HalfWheelScaleView_paintInnerCircleColor, Color.DKGRAY)
                 paintNotchColor = typedArray.getColor(R.styleable.HalfWheelScaleView_paintNotchColor, Color.parseColor("#f17634"))
                 paintIndicatorColor = typedArray.getColor(R.styleable.HalfWheelScaleView_paintIndicatorColor, Color.WHITE)
@@ -150,7 +147,7 @@ class HalfWheelScaleView : View {
         indicatorGapAngle = indicatorGapAngle / 180.toDouble() * PI
 
         paintInnerCircle = Paint()
-        paintCircleSmall= Paint()
+        paintCircleSmall = Paint()
         paintArc = Paint()
         paintIndicator = Paint()
         paintText = Paint()
@@ -208,7 +205,6 @@ class HalfWheelScaleView : View {
         notchPath.lineTo((width / 2 + 3).toFloat(), height - radiusCircleSmall + 80)
         notchPath.lineTo((width / 2 + 3).toFloat(), (height - 30 - radiusCircleSmall + CENTER_OFFSET_VERTICAL))
         notchPath.lineTo((width / 2 + 20).toFloat(), height - radiusCircleSmall + CENTER_OFFSET_VERTICAL)
-
     }
 
     private fun prepareNotchPaint() {
@@ -253,9 +249,8 @@ class HalfWheelScaleView : View {
             val formatter = DecimalFormat("00")
             val value = formatter.format(i)
             if (newThetaInDegree == angleToCompare) {
-                if (onHalfWheelValueChangeListener != null) {
+                onHalfWheelValueChangeListener?.let {
                     onHalfWheelValueChangeListener?.onHalfWheelValueChanged(value.toInt(), mMaxValue)
-
                 }
             }
         }
@@ -321,7 +316,6 @@ class HalfWheelScaleView : View {
         xcircle = eventX - centerX
         ycircle = centerY - eventY
 
-
         val originalAngle = Math.atan2(lastTouchYCircle.toDouble(), lastTouchXCircle.toDouble())
         val newAngle = Math.atan2(ycircle.toDouble(), xcircle.toDouble())
 
@@ -344,7 +338,6 @@ class HalfWheelScaleView : View {
         velocityTracker.addMovement(event)
 
         touchState = TOUCH_STATE_CLICK
-
     }
 
     private fun rotate(delta: Double) {
@@ -394,8 +387,6 @@ class HalfWheelScaleView : View {
         fun onHalfWheelValueChanged(value: Int, mMaxValue: Int)
     }
 
-    //Todo Getter Setter
-
     fun getMinValue() = mMinValue
 
     fun getMaxValue() = mMaxValue
@@ -418,7 +409,7 @@ class HalfWheelScaleView : View {
         circleWidth = Utils().dpToPx(context, donutWidth)
     }
 
-    fun setCircleSmallColor(smallColor: Int){
+    fun setCircleSmallColor(smallColor: Int) {
         paintCircleSmallColor = smallColor
         paintCircleSmall.color = paintCircleSmallColor
     }
@@ -457,6 +448,9 @@ class HalfWheelScaleView : View {
         paintIndicator.strokeWidth = indicatorStrokeWidth
     }
 
-    //Todo SaveState
+    fun setIndicatorGapAngle(gap: Double) {
+        indicatorGapAngle = gap
+    }
 
+    //Todo SaveState
 }
