@@ -1,20 +1,21 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'com.github.dcendents.android-maven'
 
 ext {
-    bintrayRepo = 'maven'
-    bintrayName = 'half-wheel-scale'
+    bintrayRepo = 'HalfWheelScale'
+    bintrayName = 'com.jirayu4r7.half_wheel_scale'
 
-    publishedGroupId = 'com.jirayu4r7'
-    libraryName = 'HalfWheelScale'
+    publishedGroupId = 'com.jirayu4r7.half_wheel_scale'
+    libraryName = 'half-wheel-scale'
     artifact = 'half-wheel-scale'
+    libraryVersion = '0.2'
 
     libraryDescription = 'Half Wheel Scale View'
 
     siteUrl = 'https://github.com/Jirayu4R7/Android-HalfWheelScale'
     gitUrl = 'https://github.com/Jirayu4R7/Android-HalfWheelScale.git'
-
-    libraryVersion = '0.1.0'
 
     developerId = 'Jirayu4R7'
     developerName = 'Jirayu Pharang'
@@ -49,6 +50,7 @@ android {
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 dependencies {
@@ -58,5 +60,10 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+
+if(project.rootProject.file('local.properties').exists()){
+    apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
+    apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
 }
 
