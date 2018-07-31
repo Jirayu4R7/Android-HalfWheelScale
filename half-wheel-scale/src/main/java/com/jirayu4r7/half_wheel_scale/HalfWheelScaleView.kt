@@ -3,6 +3,7 @@ package com.jirayu4r7.half_wheel_scale
 import android.annotation.TargetApi
 import android.content.Context
 import android.graphics.*
+import android.support.annotation.CheckResult
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.VelocityTracker
@@ -29,8 +30,8 @@ class HalfWheelScaleView : View {
     private var maxAngleTheta: Double = 0.toDouble()
     private var indicatorGapAngle: Double = 0.toDouble()
     private var currentTime: Long = 0
-    private var maxValue: Int = 0
-    private var minValue: Int = 0
+    private var mMaxValue: Int = 0
+    private var mMinValue: Int = 0
     private var indicatorInterval: Int = 0
     private var textSize: Float = 0f
     private var angleToCompare: Int = 0
@@ -116,17 +117,17 @@ class HalfWheelScaleView : View {
         attrs?.let {
             val typedArray = context.obtainStyledAttributes(attrs, R.styleable.HalfWheelScaleView)
             try {
-                indicatorInterval = typedArray.getInt(R.styleable.HalfWheelScaleView_indicatorInterval, 0)
-                maxValue = typedArray.getInt(R.styleable.HalfWheelScaleView_maxValue, 100)
-                minValue = typedArray.getInt(R.styleable.HalfWheelScaleView_minValue, 0)
+                indicatorInterval = typedArray.getInt(R.styleable.HalfWheelScaleView_indicatorInterval, 5)
+                mMaxValue = typedArray.getInt(R.styleable.HalfWheelScaleView_maxValue, 100)
+                mMinValue = typedArray.getInt(R.styleable.HalfWheelScaleView_minValue, 0)
                 textSize = typedArray.getDimension(R.styleable.HalfWheelScaleView_textSize, 12f)
                 indicatorStrokeWidth = typedArray.getDimension(R.styleable.HalfWheelScaleView_indicatorStrokeWidth, Utils().dpToPx(context, 1.5f))
                 indicatorGapAngle = typedArray.getInt(R.styleable.HalfWheelScaleView_indicatorGapAngle, 0).toDouble()
                 paintInnerCircleColor = typedArray.getColor(R.styleable.HalfWheelScaleView_paintInnerCircleColor, Color.DKGRAY)
                 paintNotchColor = typedArray.getColor(R.styleable.HalfWheelScaleView_paintNotchColor, Color.parseColor("#f17634"))
                 paintIndicatorColor = typedArray.getColor(R.styleable.HalfWheelScaleView_paintIndicatorColor, Color.WHITE)
-                paintTextColor = typedArray.getColor(R.styleable.HalfWheelScaleView_paintTextColor, 0)
-                paintArcColor = typedArray.getColor(R.styleable.HalfWheelScaleView_paintArcColor, 0)
+                paintTextColor = typedArray.getColor(R.styleable.HalfWheelScaleView_paintTextColor, Color.WHITE)
+                paintArcColor = typedArray.getColor(R.styleable.HalfWheelScaleView_paintArcColor, Color.WHITE)
                 mLongIndicatorHeight = typedArray.getDimension(R.styleable.HalfWheelScaleView_longIndicatorHeight, Utils().dpToPx(context, 18f))
                 mShortIndicatorHeight = typedArray.getDimension(R.styleable.HalfWheelScaleView_shortIndicatorHeight, Utils().dpToPx(context, 14f))
             } finally {
@@ -134,13 +135,13 @@ class HalfWheelScaleView : View {
             }
         }
 
-        if (minValue >= maxValue) {
-            maxValue = minValue
-            minValue = 0
+        if (mMinValue >= mMaxValue) {
+            mMaxValue = mMinValue
+            mMinValue = 0
         }
 
-        if (indicatorGapAngle * (maxValue - minValue) > 350) {
-            indicatorGapAngle = 350 / (maxValue - minValue).toDouble()
+        if (indicatorGapAngle * (mMaxValue - mMinValue) > 350) {
+            indicatorGapAngle = 350 / (mMaxValue - mMinValue).toDouble()
         }
 
         indicatorGapAngle = indicatorGapAngle / 180.toDouble() * PI
@@ -170,7 +171,7 @@ class HalfWheelScaleView : View {
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        maxAngleTheta = (maxValue - minValue) * indicatorGapAngle
+        maxAngleTheta = (mMaxValue - mMinValue) * indicatorGapAngle
         minAngleTheta = 0.0
 
         centerX = measuredWidth / 2f
@@ -216,14 +217,14 @@ class HalfWheelScaleView : View {
     private fun makeRadGrad(canvas: Canvas) {
         canvas.drawCircle(centerX, centerY, radius, paintInnerCircle)
         canvas.drawCircle(centerX, centerY, radius, paintArc)
-        val mPaintCircleSmall = Paint()
-        mPaintCircleSmall.color = Color.WHITE
-        canvas.drawCircle(centerX, centerY, radiusCircleSmall, mPaintCircleSmall)
+        var paintCircleSmall = Paint()
+        paintCircleSmall.color = Color.WHITE
+        canvas.drawCircle(centerX, centerY, radiusCircleSmall, paintCircleSmall)
 
         var mIndicatorHeight: Float
 
-        for (i in minValue..maxValue) {
-            val angle = (i - minValue) * indicatorGapAngle
+        for (i in mMinValue..mMaxValue) {
+            val angle = (i - mMinValue) * indicatorGapAngle
 
             mIndicatorHeight = if (i % indicatorInterval == 0) mLongIndicatorHeight
             else mShortIndicatorHeight
@@ -250,7 +251,7 @@ class HalfWheelScaleView : View {
             val value = formatter.format(i)
             if (newThetaInDegree == angleToCompare) {
                 if (onHalfWheelValueChangeListener != null) {
-                    onHalfWheelValueChangeListener?.onHalfWheelValueChanged(value.toInt(), maxValue)
+                    onHalfWheelValueChangeListener?.onHalfWheelValueChanged(value.toInt(), mMaxValue)
 
                 }
             }
@@ -387,10 +388,67 @@ class HalfWheelScaleView : View {
     }
 
     interface OnHalfWheelValueChangeListener {
-        fun onHalfWheelValueChanged(value: Int, maxValue: Int)
+        fun onHalfWheelValueChanged(value: Int, mMaxValue: Int)
     }
 
     //Todo Getter Setter
+
+    fun getMinValue() = mMinValue
+
+    fun getMaxValue() = mMaxValue
+
+    fun setValueRange(minValue: Int, maxValue: Int) {
+        mMinValue = minValue
+        mMaxValue = maxValue
+        invalidate()
+    }
+
+    fun setLongIndicatorHeight(longIndicatorHeight: Float) {
+        mLongIndicatorHeight = Utils().dpToPx(context, longIndicatorHeight)
+    }
+
+    fun setShortIndicatorHeight(shortIndicatorHeight: Float) {
+        mShortIndicatorHeight = Utils().dpToPx(context, shortIndicatorHeight)
+    }
+
+    fun setCircleW(cWidth: Float) {
+        circleWidth = Utils().dpToPx(context, cWidth)
+    }
+
+    fun setArcColor(arcColor: Int) {
+        paintArcColor = arcColor
+        paintArc.color = paintArcColor
+    }
+
+    fun setInnerCircleColor(innerCircleColor: Int) {
+        paintInnerCircleColor = innerCircleColor
+        paintInnerCircle.color = paintInnerCircleColor
+    }
+
+    fun setNotchColor(notchColor: Int) {
+        paintNotchColor = notchColor
+    }
+
+    fun setTextColor(textColor: Int) {
+        paintTextColor = textColor
+        paintText.color = paintTextColor
+    }
+
+    fun setIndicatorColor(indicatorColor: Int) {
+        paintIndicatorColor = indicatorColor
+        paintIndicator.color = paintIndicatorColor
+    }
+
+    fun setTextSize(size: Int) {
+        textSize = Utils().spToPx(context, size)
+        paintText.textSize = textSize
+    }
+
+    fun setIndicatorWidth(indicatorWidth: Float) {
+        indicatorStrokeWidth = Utils().dpToPx(context, indicatorWidth)
+        paintIndicator.strokeWidth = indicatorStrokeWidth
+    }
+
     //Todo SaveState
 
 }
