@@ -2,6 +2,10 @@
 
 #### Android custom view that uses half wheel for picking the number from given range.
 
+#### Simple
+
+<img src="https://github.com/Jirayu4R7/Android-HalfWheelScale/blob/master/art/simple.gif" width="240" height="480" />
+
 ## How to use this library?
 - ### Gradle dependency: 
     - Add below dependency into your build.gradle file.
