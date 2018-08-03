@@ -6,28 +6,49 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:title="About Me"
+        app:titleTextColor="@android:color/white" />
+
+    <ImageView
+        android:id="@+id/image_view"
+        android:layout_width="140dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/image_man"
+        app:layout_constraintBottom_toTopOf="@id/half_wheel_scale"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
     <com.jirayu4r7.half_wheel_scale.HalfWheelScaleView
         android:id="@+id/half_wheel_scale"
         android:layout_width="match_parent"
-        android:layout_height="240dp"
-        android:layout_marginBottom="0dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginStart="0dp"
+        android:layout_height="140dp"
+        app:indicatorGapAngle="3"
+        app:indicatorStrokeWidth="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:indicatorInterval="5"
-        app:longIndicatorHeight="20dp"
-        app:shortIndicatorHeight="14dp"
-        app:maxValue="160"
+        app:longIndicatorHeight="18dp"
+        app:maxValue="180"
         app:minValue="20"
-        app:indicatorStrokeWidth="1dp"
-        app:paintNotchColor="#f9aa33"
-        app:indicatorColor="#4A6572"
-        app:paintArcColor="#232F34"
-        app:paintTextColor="#232F34"
-        app:textSize="14sp"
-        app:indicatorGapAngle="3" />
+        app:paintArcColor="@android:color/black"
+        app:paintCircleColor="#F4F6FA"
+        app:paintIndicatorColor="@android:color/black"
+        app:paintInnerCircleColor="#DFF2E6"
+        app:paintNotchColor="#ef700e"
+        app:paintTextColor="@android:color/black"
+        app:shortIndicatorHeight="14dp"
+        app:textSize="12sp" />
 
     <TextView
         android:id="@+id/text_view_value"
@@ -37,9 +58,24 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/half_wheel_scale"
+        app:layout_constraintEnd_toEndOf="@+id/half_wheel_scale"
+        app:layout_constraintStart_toStartOf="@+id/half_wheel_scale" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:text="Kg."
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/half_wheel_scale"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/half_wheel_scale" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/text_view_value" />
 
 </android.support.constraint.ConstraintLayout>

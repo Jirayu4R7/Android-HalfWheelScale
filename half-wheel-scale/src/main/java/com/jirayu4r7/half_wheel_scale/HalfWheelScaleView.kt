@@ -3,6 +3,8 @@ package com.jirayu4r7.half_wheel_scale
 import android.annotation.TargetApi
 import android.content.Context
 import android.graphics.*
+import android.os.Parcel
+import android.os.Parcelable
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.VelocityTracker
@@ -251,6 +253,7 @@ class HalfWheelScaleView : View {
             if (newThetaInDegree == angleToCompare) {
                 onHalfWheelValueChangeListener?.let {
                     onHalfWheelValueChangeListener?.onHalfWheelValueChanged(value.toInt(), mMaxValue)
+                    currentValue = i
                 }
             }
         }
@@ -341,6 +344,7 @@ class HalfWheelScaleView : View {
     }
 
     private fun rotate(delta: Double) {
+        println(delta.toString())
         currentTheta += delta
         if (currentTheta <= minAngleTheta + angleToCompare * PI / 180 && currentTheta >= angleToCompare * PI / 180 - maxAngleTheta) {
             invalidate()
@@ -453,4 +457,49 @@ class HalfWheelScaleView : View {
     }
 
     //Todo SaveState
+
+    override fun onSaveInstanceState(): Parcelable {
+        val savedState = SavedState(super.onSaveInstanceState())
+        savedState.value = currentValue
+        return savedState
+    }
+
+   private var currentValue = 0
+
+    override fun onRestoreInstanceState(state: Parcelable?) {
+        if (state is SavedState) {
+            super.onRestoreInstanceState(state.superState)
+            currentValue = state.value
+            println("Current $currentValue")
+        } else {
+            super.onRestoreInstanceState(state)
+        }
+    }
+
+    internal class SavedState : View.BaseSavedState {
+        var value: Int = 0
+
+        constructor(superState: Parcelable) : super(superState)
+
+        constructor(parcel: Parcel) : super(parcel) {
+            value = parcel.readInt()
+        }
+
+        override fun writeToParcel(out: Parcel, flags: Int) {
+            super.writeToParcel(out, flags)
+            out.writeInt(value)
+        }
+
+        companion object {
+            val CREATOR = object : Parcelable.Creator<SavedState> {
+                override fun createFromParcel(source: Parcel): SavedState {
+                    return SavedState(source)
+                }
+
+                override fun newArray(size: Int): Array<SavedState?> {
+                    return arrayOfNulls(size)
+                }
+            }
+        }
+    }
 }

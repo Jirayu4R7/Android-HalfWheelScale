@@ -6,7 +6,6 @@
         <attr name="minValue" format="integer" />
         <attr name="indicatorGapAngle" format="integer" />
         <attr name="textSize" format="dimension" />
-        <attr name="indicatorColor" format="color" />
         <attr name="longIndicatorHeight" format="dimension" />
         <attr name="shortIndicatorHeight" format="dimension" />
         <attr name="indicatorStrokeWidth" format="dimension" />
